@@ -35,8 +35,13 @@ class SyncR:
     def text(self):
         # Receive and print the message
         data, addr = self.server.recvfrom(1024)
-        message = data.decode('utf-8')
-        print("Received message:", message)
+        message = data.decode()
+        print("\nReceived message:", message)
+        return message
+    
+    def close(self):
+        self.server.close()
+        wifi.disconnect()
 
 # Creating Object from Class, and then run method
 t = SyncR(8080)

@@ -40,6 +40,11 @@ class ckr:
                         self.port_On_Off(app, self.dict[app], 1)
                         print(f'{app} has turned on')
                         break
+                    elif app == 'everything':
+                        for a, p in zip(self.a_list, self.p_list):
+                            self.port_On_Off(a, p, 1)
+                        print('all appliances turned on')
+                        break
                     elif part_copy.index(app) == len(part_copy) - 1:
                         print(f'Invalid Message, {app} not registered')
                         break
@@ -51,6 +56,11 @@ class ckr:
                     if app in self.dict:
                         self.port_On_Off(app, self.dict[app], 0)
                         print(f'{app} has turned off')
+                        break
+                    elif app == 'everything':
+                        for a, p in zip(self.a_list, self.p_list):
+                            self.port_On_Off(a, p, 0)
+                        print('all appliances turned off')
                         break
                     elif part_copy.index(app) == len(part_copy) - 1:
                         print(f'Invalid Message, {app} not registered')
@@ -67,8 +77,8 @@ class ckr:
     def port_On_Off(self, app, pin, action):
         led_pin = Pin(pin, Pin.OUT)
         if action == 1:
-            print(f"Turning on {app} in pin {pin}")
+            print(f"turning on {app} in pin {pin}")
             led_pin.on()
         elif action == 0:
-            print(f"Turning off {app} in pin {pin}")
+            print(f"turning off {app} in pin {pin}")
             led_pin.off()

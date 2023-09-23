@@ -9,7 +9,7 @@ wifi = network.WLAN(network.STA_IF)
 ssid = 'SSID'
 password = 'PASSWORD'
 
-class SyncR:
+class Sync:
     def __init__(self, receiver_port):
         # Define the port on which the receiver should listen
         self.receiver_port = receiver_port
@@ -36,7 +36,7 @@ class SyncR:
         # Receive and print the message
         data, addr = self.server.recvfrom(1024)
         message = data.decode()
-        print("\nReceived message:", message)
+        print(f"\nReceived message {addr}: {message}")
         return message
     
     def close(self):
@@ -44,6 +44,6 @@ class SyncR:
         wifi.disconnect()
 
 # Creating Object from Class, and then run method
-t = SyncR(8080)
-while True:
-    t.text()
+# t = SyncR(8080)
+# while True:
+#     t.text()

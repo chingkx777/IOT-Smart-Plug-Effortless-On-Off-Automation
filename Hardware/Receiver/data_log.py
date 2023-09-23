@@ -30,14 +30,14 @@ class Sync:
         self.server.bind(('0.0.0.0', self.receiver_port))
         print("Server is listening on port", self.receiver_port)
 
-        
-        
+    
     def text(self):
         # Receive and print the message
         data, addr = self.server.recvfrom(1024)
         message = data.decode()
         print(f"\nReceived message {addr}: {message}")
         return message
+
     
     def close(self):
         self.server.close()

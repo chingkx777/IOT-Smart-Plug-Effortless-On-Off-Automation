@@ -1,4 +1,4 @@
-from receiver import SyncR
+from data_log import Sync
 from checker import ckr
 import time
 
@@ -7,7 +7,7 @@ pin = [23, 22, 21]
 
 x = ckr(appliances, pin)
 x.my_dict()
-y = SyncR(8080)
+y = Sync(8080)
 
 while True:
     try:

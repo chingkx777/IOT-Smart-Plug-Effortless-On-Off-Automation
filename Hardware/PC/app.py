@@ -9,10 +9,11 @@ from send_ip import send
 import time, socket, json, threading
 
 # IP Address for PC, SSIP, PORT
-PC_IP = 'PC_IP'
+PC_IP = 'PC'
 SSIP = 'SSIP'
-PORT = 'PORT'
+PORT = 7777
 
+# Create an object from class before execuete .text() method
 receiver = send(SSIP, PORT)
 
 appliances = ['light', 'fan', 'aircon', 'music']
@@ -85,20 +86,28 @@ class GridLayoutApp(App):
 
         return layout
 
+
+    # Function for ON Button
     def on_button_press(self, instance, appliance):
         receiver.text(f'turn on the {appliance}')
         print(f"Button ON for {appliance} was pressed!")
 
+
+    # Function for OFF Button
     def off_button_press(self, instance, appliance):
         receiver.text(f'turn off the {appliance}')
         print(f"Button OFF for {appliance} was pressed!")
 
+
+    # Function for Voice Record Button
     def voice_record_button_press(self, instance):
-        print('Voice Button pressed')
+        print('\nVoice Button Pressed')
         t = speech2text()
         receiver.text(t.get_recognized_text())
         time.sleep(2)
 
+
+    # Change ON/OFF png according to Dictionary Statuses
     def update_image_source(self, instance, value):
         appliance = instance.appliance_name
         if value == 'on.png':
@@ -106,6 +115,8 @@ class GridLayoutApp(App):
         else:
             status[appliance] = 0
 
+
+    # Listen Pin Status from ESP32
     def listen_for_udp_messages(self):
         try:
             # Create a UDP socket to listen for messages from ESP32

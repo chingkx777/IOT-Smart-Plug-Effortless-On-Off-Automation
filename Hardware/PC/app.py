@@ -8,12 +8,10 @@ from sr import speech2text
 from send_ip import send
 import time, socket, json, threading
 
-kivy.require('1.11.1')  # Replace with your Kivy version
+PC_IP = 'PC_IP'
 
-PC_IP = '192.168.1.6'
-
-SSIP = '192.168.1.19'
-PORT = 8080
+SSIP = 'SSIP'
+PORT = 'PORT'
 
 receiver = send(SSIP, PORT)
 

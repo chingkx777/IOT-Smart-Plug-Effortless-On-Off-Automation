@@ -6,6 +6,9 @@ class ckr:
         self.a_list = a_list
         self.p_list = p_list
         
+        # Pins Status
+        self.status_list = []
+        
         # Check both lists
         if len(self.a_list) == len(self.p_list):
             for item in self.a_list:
@@ -82,3 +85,10 @@ class ckr:
         elif action == 0:
             print(f"turning off {app} in pin {pin}")
             led_pin.off()
+            
+    def pin(self):
+        for item in self.p_list:
+            pin_exp = Pin(item, Pin.OUT)
+            a = pin_exp.value()
+            self.status_list.append(a)
+        return self.status_list

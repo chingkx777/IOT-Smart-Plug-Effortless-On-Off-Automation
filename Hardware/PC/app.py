@@ -8,8 +8,8 @@ from sr import speech2text
 from send_ip import send
 import time, socket, json, threading
 
+# IP Address for PC, SSIP, PORT
 PC_IP = 'PC_IP'
-
 SSIP = 'SSIP'
 PORT = 'PORT'
 

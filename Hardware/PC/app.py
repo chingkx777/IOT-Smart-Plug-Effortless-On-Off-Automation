@@ -32,7 +32,7 @@ class WelcomePage(Screen):
         layout = GridLayout(cols=1, rows=3, spacing=10, padding=(10, 20))  # Three rows with spacing and padding
 
         # Image (first row)
-        welcome_image = Image(source='iot_home.png')
+        welcome_image = Image(source='iot_home.jpg')
         layout.add_widget(welcome_image)
 
         # Big "Welcome" text (second row)

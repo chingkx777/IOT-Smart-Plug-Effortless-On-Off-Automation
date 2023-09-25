@@ -149,7 +149,6 @@ class MainLayout(Screen):
         print('\nVoice Button Pressed')
         t = speech2text()
         receiver.text(t.get_recognized_text())
-        time.sleep(2)
 
     # Change ON/OFF png according to Dictionary Statuses
     def update_image_source(self, instance, value):

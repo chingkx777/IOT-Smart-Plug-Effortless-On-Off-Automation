@@ -29,6 +29,7 @@ class ckr:
     # Display Dictionary
     def my_dict(self):
         print(self.dict)
+        print('')
 
 
     # Check message from user input
@@ -80,10 +81,10 @@ class ckr:
     def port_On_Off(self, app, pin, action):
         led_pin = Pin(pin, Pin.OUT)
         if action == 1:
-            print(f"turning on {app} in pin {pin}")
+            print(f'turning on {app} in pin {pin}')
             led_pin.on()
         elif action == 0:
-            print(f"turning off {app} in pin {pin}")
+            print(f'turning off {app} in pin {pin}')
             led_pin.off()
             
     def pin(self):

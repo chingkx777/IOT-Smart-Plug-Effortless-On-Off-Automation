@@ -2,6 +2,7 @@ import network
 import socket
 import time
 import json
+from machine import Pin, PWM
 
 # Global Wi-Fi Variable
 wifi = network.WLAN(network.STA_IF)
@@ -23,12 +24,17 @@ class Sync:
         # Wait for Wi-Fi connection
         i = 0
         while not wifi.isconnected():
-            print(f'\nConnecting to Wi-Fi......{i}s')
+            print(f'Connecting to Wi-Fi......{i}s')
             time.sleep(1)
             i += 1
-
+        
         print("\nConnected to Wi-Fi")
         print(f'IP: {wifi.ifconfig()}')
+
+        # LED 2 turn on when Wi-Fi is connected
+        led2 = PWM(Pin(2))
+        led2.freq(1000)
+        led2.duty(100)
         
         # Create a socket server to receive messages
         self.server = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -37,12 +43,12 @@ class Sync:
     def text(self):
         # Bind Server
         self.server.bind(('0.0.0.0', self.receiver_port))
-        print("Server is listening on port", self.receiver_port)
+        print('Server is listening on port', self.receiver_port)
         
         # Receive and print the message
         data, addr = self.server.recvfrom(1024)
         message = data.decode()
-        print(f"\nReceived message {addr}: {message}")
+        print(f'\nReceived message {addr}: {message}')
         
         return message
     
@@ -63,11 +69,11 @@ class Sync:
 
             # Send the JSON data to the PC
             self.server.sendto(data_bytes, (self.receiver_ip, self.receiver_port))
-            message = f"Data sent: {data_to_send}"
+            message = f'Data sent: {data_to_send}'
             print(message)
             
             # Reset list to initial state
             data_to_send.clear()
             
         except Exception as e:
-            print("Error:", e)
+            print('Error:', e)

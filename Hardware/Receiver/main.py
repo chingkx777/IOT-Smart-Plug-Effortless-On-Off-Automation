@@ -3,6 +3,11 @@ from checker import ckr
 import time
 import uasyncio as asyncio
 from button import ButtonOnOff
+from oled import oled
+from hcsr04 import HCSR04
+
+# Sensor
+sensor = HCSR04(trigger_pin=5, echo_pin=18, echo_timeout_us=10000)
 
 # List all input and output name and gpio
 appliances = ['light', 'fan', 'aircon', 'music']
@@ -12,6 +17,7 @@ button = [12, 13, 14, 27]
 ssid_pc = '192.168.1.6'
 port = 8080
 
+oled([["", 20]])
 x = ckr(appliances, pin)
 x.my_dict()
 y = Sync(ssid_pc, port)
@@ -20,37 +26,43 @@ z = ButtonOnOff(button, pin)
 class SensorHandler:
     def __init__(self):
         self.sensor_value = 0
-        self.threshold = 10
+        self.threshold = 5
+        self.switch_to_app = asyncio.Event()
+        self.switch_to_button = asyncio.Event()
     
-    # Initialize when sensor value self.sensor_value > self.threshold 
     async def app_run(self):
         while True:
-            self.sensor_value = 11
-            # Check if sensor_value indicates the need to switch to button_run
+            self.sensor_value = sensor.distance_cm()
             if self.sensor_value <= self.threshold:
                 print("\nSwitching to button coroutine")
-                await self.button_run()
+                oled([['<<<Button Mode>>>', 20]])
+                self.switch_to_button.set()
+                await self.switch_to_app.wait()
+                self.switch_to_app.clear()
             else:
-                # Receive message from app
                 y.status(x.pin())
                 command = y.text()
                 x.msg(command)
     
-    # Initialize when sensor value self.sensor_value <= self.threshold 
     async def button_run(self):
         while True:
-            self.sensor_value = 11
-            # Check if sensor_value indicates the need to switch to app_run
+            self.sensor_value = sensor.distance_cm()
             if self.sensor_value > self.threshold:
                 print("\nSwitching to app coroutine")
-                await self.app_run()
+                oled([['<<<<App Mode>>>>', 20]])
+                self.switch_to_app.set()
+                await self.switch_to_button.wait()
+                self.switch_to_button.clear()
             else:
                 z.check_buttons()
-                time.sleep_ms(100)
+                await asyncio.sleep_ms(100)
 
 async def main():
     sensor_handler = SensorHandler()
     await asyncio.gather(sensor_handler.app_run(), sensor_handler.button_run())
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+try:
+    asyncio.run(main())
+except KeyboardInterrupt:
+    print('I am going under maintenance......')
+    y.close()

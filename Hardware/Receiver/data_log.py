@@ -3,13 +3,14 @@ import socket
 import time
 import json
 from machine import Pin, PWM
+from oled import oled
 
 # Global Wi-Fi Variable
 wifi = network.WLAN(network.STA_IF)
 
 # Define your Wi-Fi credentials
-ssid = 'SSID'
-password = 'PASSWORD'
+ssid = 'wongleihong 2.4Ghz@unifi'
+password = 'abcd067615343'
 
 class Sync:
     def __init__(self, receiver_ip, receiver_port):

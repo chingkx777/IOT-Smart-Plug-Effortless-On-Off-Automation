@@ -1,4 +1,5 @@
 from machine import Pin
+from oled import oled
 
 class ckr:
     def __init__(self, a_list, p_list):
@@ -43,14 +44,17 @@ class ckr:
                     if app in self.dict:
                         self.port_On_Off(app, self.dict[app], 1)
                         print(f'{app} has turned on')
+                        oled(f'{app} [On]', 40)
                         break
                     elif app == 'everything':
                         for a, p in zip(self.a_list, self.p_list):
                             self.port_On_Off(a, p, 1)
                         print('all appliances turned on')
+                        oled('All [On]', 40)
                         break
                     elif part_copy.index(app) == len(part_copy) - 1:
                         print(f'Invalid Message, {app} not registered')
+                        oled('Invalid Message', 40)
                         break
                     else:
                         continue
@@ -60,14 +64,17 @@ class ckr:
                     if app in self.dict:
                         self.port_On_Off(app, self.dict[app], 0)
                         print(f'{app} has turned off')
+                        oled(f'{app} [Off]', 40)
                         break
                     elif app == 'everything':
                         for a, p in zip(self.a_list, self.p_list):
                             self.port_On_Off(a, p, 0)
                         print('all appliances turned off')
+                        oled('All [Off]', 40)
                         break
                     elif part_copy.index(app) == len(part_copy) - 1:
                         print(f'Invalid Message, {app} not registered')
+                        oled('Invalid Message', 40)
                         break
                     else:
                         continue

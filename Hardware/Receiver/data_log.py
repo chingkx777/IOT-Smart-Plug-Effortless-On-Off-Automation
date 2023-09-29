@@ -31,6 +31,8 @@ class Sync:
         
         print("\nConnected to Wi-Fi")
         print(f'IP: {wifi.ifconfig()}')
+        
+        oled([[f'IP: {wifi.ifconfig()[0]}', 20]])
 
         # LED 2 turn on when Wi-Fi is connected
         led2 = PWM(Pin(2))

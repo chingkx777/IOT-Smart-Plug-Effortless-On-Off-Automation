@@ -45,7 +45,7 @@ class ckr:
                         self.port_On_Off(app, self.dict[app], 1)
                         print(f'{app} has turned on')
                         oled([
-                            ['<<<<App Mode>>>>', 20],
+                            ['<<App Mode>>', 20],
                             [f'{app} [On]', 40]
                             ])
                         break
@@ -54,14 +54,14 @@ class ckr:
                             self.port_On_Off(a, p, 1)
                         print('all appliances turned on')
                         oled([
-                            ['<<<<App Mode>>>>', 20],
+                            ['<<App Mode>>', 20],
                             ['All [On]', 40]
                             ])
                         break
                     elif part_copy.index(app) == len(part_copy) - 1:
                         print(f'Invalid Message, {app} not registered')
                         oled([
-                            ['<<<<App Mode>>>>', 20],
+                            ['<<App Mode>>', 20],
                             ['Invalid Message', 40]
                             ])
                         break
@@ -74,7 +74,7 @@ class ckr:
                         self.port_On_Off(app, self.dict[app], 0)
                         print(f'{app} has turned off')
                         oled([
-                            ['<<<<App Mode>>>>', 20],
+                            ['<<App Mode>>', 20],
                             [f'{app} [Off]', 40]
                             ])
                         break
@@ -83,14 +83,14 @@ class ckr:
                             self.port_On_Off(a, p, 0)
                         print('all appliances turned off')
                         oled([
-                            ['<<<<App Mode>>>>', 20],
+                            ['<<App Mode>>', 20],
                             ['All [Off]', 40]
                             ])
                         break
                     elif part_copy.index(app) == len(part_copy) - 1:
                         print(f'Invalid Message, {app} not registered')
                         oled([
-                            ['<<<<App Mode>>>>', 20],
+                            ['<<App Mode>>', 20],
                             ['Invalid Message', 40]
                             ])
                         break
@@ -113,6 +113,7 @@ class ckr:
             led_pin.off()
             
     def pin(self):
+        self.status_list = []  # Clear the status_list
         for item in self.p_list:
             pin_exp = Pin(item, Pin.OUT)
             a = pin_exp.value()

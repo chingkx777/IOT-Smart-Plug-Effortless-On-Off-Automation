@@ -138,17 +138,20 @@ class MainLayout(Screen):
     def on_button_press(self, instance, appliance):
         receiver.text(f'turn on the {appliance}')
         print(f"Button ON for {appliance} was pressed!")
+        receiver.text('Refresh')
 
     # Function for OFF Button
     def off_button_press(self, instance, appliance):
         receiver.text(f'turn off the {appliance}')
         print(f"Button OFF for {appliance} was pressed!")
+        receiver.text('Refresh')
 
     # Function for Voice Record Button
     def voice_record_button_press(self, instance):
         print('\nVoice Button Pressed')
         t = speech2text()
         receiver.text(t.get_recognized_text())
+        receiver.text('Refresh')
 
     # Change ON/OFF png according to Dictionary Statuses
     def update_image_source(self, instance, value):

@@ -30,9 +30,18 @@ class Sync:
             i += 1
         
         print("\nConnected to Wi-Fi")
-        print(f'IP: {wifi.ifconfig()}')
+        self.ip = f'{wifi.ifconfig()[0]}'
         
-        oled([[f'IP: {wifi.ifconfig()[0]}', 20]])
+        # Specify the file name
+        file_name = "ip_address.txt"
+
+        # Open the file in write mode
+        with open(file_name, "w") as file:
+            # Write the IP address to the file
+            file.write(self.ip)
+
+        # Close the file
+        file.close()
 
         # LED 2 turn on when Wi-Fi is connected
         led2 = PWM(Pin(2))

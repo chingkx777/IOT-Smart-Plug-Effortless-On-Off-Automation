@@ -9,8 +9,8 @@ from oled import oled
 wifi = network.WLAN(network.STA_IF)
 
 # Define your Wi-Fi credentials
-ssid = 'wongleihong 2.4Ghz@unifi'
-password = 'abcd067615343'
+ssid = 'SSID'
+password = 'PASSWORD'
 
 class Sync:
     def __init__(self, receiver_ip, receiver_port):

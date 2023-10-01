@@ -3,6 +3,10 @@ from checker import ckr
 from oled import oled
 from button import button
 import time, machine, utime, json
+from hcsr04 import HCSR04
+
+# HCSR04 Sensor Initialization
+sensor = HCSR04(trigger_pin=5, echo_pin=18, echo_timeout_us=10000)
 
 # Current time initialize
 current_time = utime.localtime()
@@ -49,8 +53,7 @@ x.my_dict()
 y = Sync(ssid_pc, port)
 controller = button(button_list, pin_list)
 
-# Create a separate machine.Pin object for button 12 and 26
-button_12_pin = machine.Pin(12, machine.Pin.IN, machine.Pin.PULL_UP)
+# Create a separate machine.Pin object for button 26
 button_26_pin = machine.Pin(26, machine.Pin.IN, machine.Pin.PULL_UP)
 
 def task_1():
@@ -70,28 +73,66 @@ def task_2():
 
 try:
     while i != 0:
-        # Read the state of button 12
-        button_12_state = button_12_pin.value()
-        button_26_state = button_26_pin.value()
+        # Read the distance from HCSR04 Sensor
+        distance = sensor.distance_cm()
 
         # Check button 26 state
-        if button_26_state == 0:
+        if distance <= 5:
             oled([["Waiting......", 20]])
             print('task 1')
-            button_26_state = 1
             time.sleep(3)
             oled([["<<Button Mode>>", 20]])
             while True:
+                button_26_state = button_26_pin.value()
                 task_1()
-                button_26_state = button_26_pin.value()  # Update button_26_state
+                if button_26_state == 0:
+                    time.sleep(1)
+                    break
+            j = 10
+            while j != 0:
+                button_26_state = button_26_pin.value()
                 if button_26_state == 0:
                     break
+                else:
+                    oled([
+                 [f'{j} second left', 20],
+                 ['Do you want to', 30],
+                 ['remain state of all', 40],
+                 ['appliances? Y/N', 50]
+                ])
+                    j -= 1
+                    time.sleep(1)
+                    if j == 0:
+                        with open(file_name1, "w") as file:
+                            # Serialize the list to a JSON string
+                            list_pin_json = json.dumps([0, 0, 0, 0])
+                            print(f'Memory Save: {list_pin_json}')
+                            
+                            # Write the JSON string to the file, overwriting existing data
+                            file.write(list_pin_json)
+                        with open(file_name1, "r") as file:
+                            # Read the pin status from the file as a JSON string
+                            status_json = file.read()
+                                
+                            # Deserialize the JSON string into a list of integers
+                            status = json.loads(status_json)
+
+                            pin_memory = [machine.Pin(pin, machine.Pin.OUT) for pin in pin_list]
+
+                            def update_pins():
+                                for pin, state in zip(pin_memory, status):
+                                    pin.value(state)
+
+                            update_pins()
+                    else:
+                        continue
             break
-                    
+        
         else:
             oled([
                  [f'{i} second before', 20],
                  ['button mode off', 30],
+                 [f'{distance} cm', 50]
                 ])
             time.sleep(1)
             i -= 1

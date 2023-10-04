@@ -5,7 +5,7 @@ import ssd1306
 class oled:
     def __init__(self, input_lists):
         # Initialize OLED Pin
-        i2c = SoftI2C(scl=Pin(4), sda=Pin(15))
+        i2c = SoftI2C(scl=Pin(5), sda=Pin(4))
 
         # OLED Width and Height
         oled_width = 128

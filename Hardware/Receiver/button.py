@@ -1,5 +1,6 @@
 import machine
 import time
+import _thread
 
 class button:
     def __init__(self, button_pins, led_pins):
@@ -11,6 +12,8 @@ class button:
         self.button_states = [True] * len(self.button_pins)
         self.last_button_states = [True] * len(self.button_pins)
 
+        # Flag to control the button thread
+        self.running = False
 
     def debounce(self, button_index):
         # Debounce function to filter out button noise
@@ -20,13 +23,19 @@ class button:
             self.button_states[button_index] = self.button_pins[button_index].value()
         return self.button_states[button_index]
 
+    def button_thread(self):
+        self.running = True
+        while self.running:
+            for i in range(len(self.button_pins)):
+                if not self.debounce(i) and self.last_button_states[i]:
+                    # Button was pressed
+                    led = self.led_pins[i]
+                    led.value(not led.value())  # Toggle the corresponding LED pin
+                self.last_button_states[i] = self.button_states[i]
+            time.sleep_ms(10)  # Small delay to avoid busy-waiting
 
-    def run(self):
-        for i in range(len(self.button_pins)):
-            if not self.debounce(i) and self.last_button_states[i]:
-                # Button was pressed
-                led = self.led_pins[i]
-                led.value(not led.value())  # Toggle the corresponding LED pin
-            self.last_button_states[i] = self.button_states[i]
+    def start(self):
+        _thread.start_new_thread(self.button_thread, ())
 
-        time.sleep_ms(10)  # Small delay to avoid busy-waiting
+    def stop(self):
+        self.running = False

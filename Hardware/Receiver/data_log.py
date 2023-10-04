@@ -9,8 +9,8 @@ from oled import oled
 wifi = network.WLAN(network.STA_IF)
 
 # Define your Wi-Fi credentials
-ssid = 'SSID'
-password = 'PASSWORD'
+ssid = 'wongleihong 2.4Ghz@unifi'
+password = 'abcd067615343'
 
 class Sync:
     def __init__(self, receiver_ip, receiver_port):
@@ -25,9 +25,13 @@ class Sync:
         # Wait for Wi-Fi connection
         i = 0
         while not wifi.isconnected():
-            print(f'Connecting to Wi-Fi......{i}s')
             time.sleep(1)
             i += 1
+            print(f'Connecting to Wi-Fi......{i}s')
+            oled([
+                ["Waiting for", 20],
+                [f"Wi-Fi...{i}s", 30]
+                  ])
         
         print("\nConnected to Wi-Fi")
         self.ip = f'{wifi.ifconfig()[0]}'

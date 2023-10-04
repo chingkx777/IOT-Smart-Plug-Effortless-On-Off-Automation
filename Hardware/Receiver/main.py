@@ -5,19 +5,10 @@ from button import button
 import time, machine, utime, json
 from hcsr04 import HCSR04
 
-# HCSR04 Sensor Initialization
-sensor = HCSR04(trigger_pin=5, echo_pin=18, echo_timeout_us=10000)
-
-# Current time initialize
-current_time = utime.localtime()
-year, month, day, hour, minute, second, weekday, yearday = current_time
-
-# IP Address of ESP32, time to enable button mode
+# Text File saving IP Address
 file_name = "ip_address.txt"
-file_name1 = "pin_status.txt"
-i = 10
 
-# List all input and output name and gpio
+# List all input and output name and GPIO
 appliances = ['light', 'fan', 'aircon', 'music']
 pin_list = [23, 22, 21, 19]
 button_list = [12, 13, 14, 27]
@@ -26,127 +17,50 @@ button_list = [12, 13, 14, 27]
 ssid_pc = '192.168.1.6'
 port = 8080
 
-oled_display = oled([["", 20]])  # Initialize OLED display
-with open(file_name1, "r") as file:
-    # Read the pin status from the file as a JSON string
-    status_json = file.read()
-        
-    # Deserialize the JSON string into a list of integers
-    status = json.loads(status_json)
-
-    pin_memory = [machine.Pin(pin, machine.Pin.OUT) for pin in pin_list]
-
-    def update_pins():
-        for pin, state in zip(pin_memory, status):
-            pin.value(state)
-
-    update_pins()
-    print(f'Pin Updated on {hour}:{minute}:{second} {day}/{month}/{year}')
-# Initialize OLED display
-oled_display = oled([
-    ["Pin Updated", 20],
-    [f'{hour}:{minute}:{second}', 40],
-    [f'{day}/{month}/{year}', 50]
-                     ]) 
 x = ckr(appliances, pin_list)
 x.my_dict()
 y = Sync(ssid_pc, port)
 controller = button(button_list, pin_list)
 
-# Create a separate machine.Pin object for button 26
-button_26_pin = machine.Pin(26, machine.Pin.IN, machine.Pin.PULL_UP)
+with open(file_name, "r") as file:
+    # Read the IP address from the file
+    saved_ip_address = file.read()
+    print("Saved IP address:", saved_ip_address)
+    oled([[f'{saved_ip_address}', 20]])
+
+# Define a flag to control the task_2 loop
+task_2_running = False
+
+# Define a timer to periodically check for messages
+message_check_timer = time.ticks_ms()
 
 def task_1():
-    controller.run()
-
-def task_2():
-    y.status(x.pin())
-    with open(file_name1, "w") as file:
-        # Serialize the list to a JSON string
-        list_pin_json = json.dumps(x.pin())
-        print(f'Memory Save: {list_pin_json}')
-        
-        # Write the JSON string to the file, overwriting existing data
-        file.write(list_pin_json)
     command = y.text()
     x.msg(command)
+    # Add task-specific code for task_1 here
 
-try:
-    while i != 0:
-        # Read the distance from HCSR04 Sensor
-        distance = sensor.distance_cm()
+def task_2():
+    my_button = button(button_list, pin_list)
+    my_button.start()
+    
+    text = y.text()
+    if text == 'stop':
+        my_button.stop()
+        y.status(x.pin())
 
-        # Check button 26 state
-        if distance <= 5:
-            oled([["Waiting......", 20]])
-            print('task 1')
-            time.sleep(3)
-            oled([["<<Button Mode>>", 20]])
-            while True:
-                button_26_state = button_26_pin.value()
-                task_1()
-                if button_26_state == 0:
-                    time.sleep(1)
-                    break
-            j = 10
-            while j != 0:
-                button_26_state = button_26_pin.value()
-                if button_26_state == 0:
-                    break
-                else:
-                    oled([
-                 [f'{j} second left', 20],
-                 ['Do you want to', 30],
-                 ['remain state of all', 40],
-                 ['appliances? Y/N', 50]
-                ])
-                    j -= 1
-                    time.sleep(1)
-                    if j == 0:
-                        with open(file_name1, "w") as file:
-                            # Serialize the list to a JSON string
-                            list_pin_json = json.dumps([0, 0, 0, 0])
-                            print(f'Memory Save: {list_pin_json}')
-                            
-                            # Write the JSON string to the file, overwriting existing data
-                            file.write(list_pin_json)
-                        with open(file_name1, "r") as file:
-                            # Read the pin status from the file as a JSON string
-                            status_json = file.read()
-                                
-                            # Deserialize the JSON string into a list of integers
-                            status = json.loads(status_json)
+while True:
+    try:
+        text = y.text()
+        y.status(x.pin())
 
-                            pin_memory = [machine.Pin(pin, machine.Pin.OUT) for pin in pin_list]
-
-                            def update_pins():
-                                for pin, state in zip(pin_memory, status):
-                                    pin.value(state)
-
-                            update_pins()
-                    else:
-                        continue
-            break
-        
+        if text == "task_1":
+            oled([['[APP MODE]', 20]])
+            task_1()
+        elif text == "task_2":
+            oled([['[BUTTON MODE]', 20]])
+            task_2()
         else:
-            oled([
-                 [f'{i} second before', 20],
-                 ['button mode off', 30],
-                 [f'{distance} cm', 50]
-                ])
-            time.sleep(1)
-            i -= 1
-            continue
-
-    with open(file_name, "r") as file:
-            # Read the IP address from the file
-            saved_ip_address = file.read()
-            print("Saved IP address:", saved_ip_address)
-            oled([[f'{saved_ip_address}', 20]])
-
-    while True:
-        print('task 2')
-        task_2()
-except KeyboardInterrupt:
-    print('I am under maintenance')
-    y.close()
+            pass
+    except KeyboardInterrupt:
+        print('I am under maintainance......')
+        y.close()

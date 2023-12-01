@@ -1,7 +1,5 @@
 # Intelligent Home Automation System
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -69,10 +67,5 @@ Provide instructions on how users can set up and use your Intelligent Home Autom
 
 If you would like to contribute to this project, please follow our [contribution guidelines](CONTRIBUTING.md).
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 *This project has successfully met all the requirements and aims to provide users with an efficient and convenient solution for home automation.*

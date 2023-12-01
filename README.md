@@ -1,6 +1,6 @@
 # Intelligent Home Automation System
 
-![Intelligent Home Automation System](images/circuit_connection.png)
+![Intelligent Home Automation System](images/Intelligent Home Automation System.png)
 
 ## Table of Contents
 

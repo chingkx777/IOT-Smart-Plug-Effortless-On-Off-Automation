@@ -1,6 +1,7 @@
 # Intelligent Home Automation System
 
-![Intelligent Home Automation System](https://miro.medium.com/v2/resize:fit:1400/0*9R3WH9hpAaHHaCfa.jpg)
+<img src="https://miro.medium.com/v2/resize:fit:1400/0*9R3WH9hpAaHHaCfa.jpg" alt="Intelligent Home Automation System" width="400"/>
+
 
 ## Table of Contents
 
@@ -13,9 +14,6 @@
     - [Circuit Connection](#circuit-connection)
     - [User Interface](#user-interface)
     - [How It Works](#how-it-works)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Introduction
 
@@ -58,16 +56,3 @@ This Intelligent Home Automation System comprises a smart IoT plug that enables 
 #### How It Works
 
 ![How It Works](images/how_it_works.png)
-
-*Caption: Illustration of how the Intelligent Home Automation System operates.*
-
-## Usage
-
-Provide instructions on how users can set up and use your Intelligent Home Automation System. Include details on installation, dependencies, and any additional configurations.
-
-## Contributing
-
-If you would like to contribute to this project, please follow our [contribution guidelines](CONTRIBUTING.md).
-
-
-*This project has successfully met all the requirements and aims to provide users with an efficient and convenient solution for home automation.*

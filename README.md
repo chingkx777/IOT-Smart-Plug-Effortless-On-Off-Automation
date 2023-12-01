@@ -1,7 +1,6 @@
 # Intelligent Home Automation System
 
-<img src="https://miro.medium.com/v2/resize:fit:1400/0*9R3WH9hpAaHHaCfa.jpg" alt="Intelligent Home Automation System" width="400"/>
-
+<img src="https://miro.medium.com/v2/resize:fit:1400/0*9R3WH9hpAaHHaCfa.jpg" alt="Intelligent Home Automation System" width="1000"/>
 
 ## Table of Contents
 

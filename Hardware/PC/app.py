@@ -9,16 +9,17 @@ from kivy.uix.boxlayout import BoxLayout
 from sr import speech2text
 from send_ip import send
 import time, socket, json, threading
+from kivy.uix.popup import Popup
 
 # IP Address for PC, SSIP, PORT
-PC_IP = '192.168.1.6'
-SSIP = '192.168.1.19'
-PORT = 8080
+PC_IP = '192.168.43.140'
+SSIP = '192.168.43.215'
+PORT = 8000
 
 # Create an object from class before execute .text() method
 receiver = send(SSIP, PORT)
 
-appliances = ['light', 'fan', 'aircon', 'music']
+appliances = ['light', 'fan', 'router', 'music']
 pin = [23, 22, 21, 19]
 
 # Use a dictionary to store appliance statuses
@@ -63,7 +64,9 @@ class WelcomePage(Screen):
         self.add_widget(layout)
 
     def enter_button_press(self, instance):
-        receiver.text('Enter')
+        receiver.text('stop')
+        receiver.text('task_1')
+        receiver.text('enter')
         # Switch to the main layout when the "Enter" button is pressed
         App.get_running_app().root.current = 'main_layout'
 
@@ -71,7 +74,7 @@ class WelcomePage(Screen):
 class MainLayout(Screen):
     def __init__(self, **kwargs):
         super(MainLayout, self).__init__(**kwargs)
-        layout = GridLayout(cols=3, rows=6, spacing=10, padding=10)
+        layout = GridLayout(cols=3, rows=len(appliances) + 3, spacing=10, padding=10)
 
         # First row
         # Left column (empty)
@@ -120,11 +123,31 @@ class MainLayout(Screen):
             layout.add_widget(on_button)
             layout.add_widget(off_button)
 
-        # Last row with a button in the middle column
-        layout.add_widget(Label())  # Empty widget for the left column
-        voice_record_button = Button(text='Voice Record')
+        # Get the size_hint of the individual buttons
+        button_size_hint = (None, None)
+
+        # Add "Voice Record" button to the first column
+        voice_record_button = Button(text='Voice Record', size_hint=button_size_hint)
+        voice_record_button.size = (320, 100)  # Set the size directly
         voice_record_button.bind(on_press=self.voice_record_button_press)
         layout.add_widget(voice_record_button)
+
+        # Add "All On" button with the same size as individual buttons to the second column
+        all_on_button = Button(text='All On', size_hint=button_size_hint)
+        all_on_button.size = (320, 100)  # Set the size directly
+        all_on_button.bind(on_press=self.all_on_button_press)
+        layout.add_widget(all_on_button)
+
+        # Add "All Off" button with the same size as individual buttons to the third column
+        all_off_button = Button(text='All Off', size_hint=button_size_hint)
+        all_off_button.size = (320, 100)  # Set the size directly
+        all_off_button.bind(on_press=self.all_off_button_press)
+        layout.add_widget(all_off_button)
+
+        exit_button = Button(text='Exit')
+        exit_button.bind(on_press=self.exit_button_press)
+        layout.add_widget(Label())  # Empty widget for the left column
+        layout.add_widget(exit_button)
         layout.add_widget(Label())  # Empty widget for the right column
 
         # Start a thread to listen for UDP messages and update statuses
@@ -136,18 +159,23 @@ class MainLayout(Screen):
 
     # Function for ON Button
     def on_button_press(self, instance, appliance):
+        receiver.text('task_1')
         receiver.text(f'turn on the {appliance}')
         print(f"Button ON for {appliance} was pressed!")
+        time.sleep(0.5)
         receiver.text('Refresh')
 
     # Function for OFF Button
     def off_button_press(self, instance, appliance):
+        receiver.text('task_1')
         receiver.text(f'turn off the {appliance}')
         print(f"Button OFF for {appliance} was pressed!")
+        time.sleep(0.5)
         receiver.text('Refresh')
 
     # Function for Voice Record Button
     def voice_record_button_press(self, instance):
+        receiver.text('task_1')
         print('\nVoice Button Pressed')
         t = speech2text()
         receiver.text(t.get_recognized_text())
@@ -171,6 +199,7 @@ class MainLayout(Screen):
 
                 while True:
                     data, addr = sock.recvfrom(1024)
+                    print('OK')
 
                     try:
                         # Parse the received JSON data as a list
@@ -198,8 +227,66 @@ class MainLayout(Screen):
                     except json.JSONDecodeError as e:
                         print(f"Error decoding JSON data: {e}")
 
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON data: {e}")
         except Exception as e:
             print(f"Error listening for UDP messages: {e}")
+    
+    def add_all_on_off_buttons(self, layout):
+        # All On button (centered)
+        all_on_button = Button(text='All On', size_hint=(None, None), size=(300, 100))
+        all_on_button.bind(on_press=self.all_on_button_press)
+        layout.add_widget(all_on_button)
+
+        # All Off button (centered)
+        all_off_button = Button(text='All Off', size_hint=(None, None), size=(300, 100))
+        all_off_button.bind(on_press=self.all_off_button_press)
+        layout.add_widget(all_off_button)
+
+    def all_on_button_press(self, instance):
+        receiver.text('task_1')
+        receiver.text('everything on')
+        print("Button ON for ALL was pressed!")
+        time.sleep(0.5)
+        receiver.text('Refresh')
+
+    def all_off_button_press(self, instance):
+        receiver.text('task_1')
+        receiver.text('everything off')
+        print("Button OFF for ALL was pressed!")
+        time.sleep(0.5)
+        receiver.text('Refresh')
+
+    def exit_button_press(self, instance):
+        # Create a popup confirmation dialog before exiting
+        confirm_popup = Popup(title='Exit Confirmation', size_hint=(None, None), size=(400, 200))
+
+        # Create a horizontal BoxLayout for buttons
+        button_layout = BoxLayout(orientation='horizontal', spacing=10)
+
+        # Add Yes and No buttons to the BoxLayout
+        yes_button = Button(text='Yes', size_hint=(None, None), size=(100, 50))
+        no_button = Button(text='No', size_hint=(None, None), size=(100, 50))
+
+        # Bind the functions to the Yes and No buttons
+        yes_button.bind(on_press=self.exit_app)
+        no_button.bind(on_press=confirm_popup.dismiss)
+
+        # Add buttons to the BoxLayout
+        button_layout.add_widget(yes_button)
+        button_layout.add_widget(no_button)
+
+        # Add the BoxLayout to the popup content
+        confirm_popup.content = button_layout
+
+        # Open the popup
+        confirm_popup.open()
+
+    def exit_app(self, instance):
+        print('Closing App......')
+        receiver.text('task_2')
+        # Function to exit the application
+        App.get_running_app().stop()
 
 
 class GridLayoutApp(App):

@@ -1,4 +1,10 @@
 from machine import Pin
+from dfplayermini import Player
+
+# Music Initialize
+music = Player(pin_TX=18, pin_RX=19)
+# Music Volume Initialize
+music.volume(20)
 
 class ckr:
     def __init__(self, a_list, p_list):
@@ -69,6 +75,27 @@ class ckr:
                     elif part_copy.index(app) == len(part_copy) - 1:
                         print(f'Invalid Message, {app} not registered')
                         break
+                    else:
+                        continue
+            elif item == 'music':
+                part_copy.remove('music')
+                for app in part_copy:
+                    if app == 'play':
+                        music.play(2)
+                        break
+                    elif app == 'pause':
+                        music.pause()
+                        break
+                    elif app == 'resume':
+                        music.resume()
+                        break
+                    elif app == 'stop':
+                        music.stop()
+                        break
+                    elif app == 'switch':
+                        music.play(3)
+                    elif part_copy.index(app) == len(part_copy) - 1:
+                        print('Invalid Message: {string}')
                     else:
                         continue
             elif part.index(item) == len(part) - 1:

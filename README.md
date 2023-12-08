@@ -12,7 +12,6 @@
   - [Project Showcase](#project-showcase)
     - [Circuit Connection](#circuit-connection)
     - [User Interface](#user-interface)
-    - [License](#license)
 
 ## Introduction
 
@@ -59,9 +58,3 @@ This Intelligent Home Automation System comprises a smart IoT plug that enables 
 <img src="https://github.com/chingkx777/IOT-Smart-Plug-Effortless-On-Off-Automation/blob/main/App%20Page%202.png" alt="Main Hub Connection" width="400" height="300">
 
 *Caption: Snapshot of the mobile app user interface.*
-
-#### License
-
-This project is licensed under the [License Name] - see the [LICENSE](LICENSE) file for details.
-
-[License Name] - Describe the license here, e.g., MIT License, Apache License 2.0, etc.

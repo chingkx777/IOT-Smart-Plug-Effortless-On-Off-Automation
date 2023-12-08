@@ -9,8 +9,8 @@ from oled import oled
 wifi = network.WLAN(network.STA_IF)
 
 # Define your Wi-Fi credentials
-ssid = 'wongleihong 2.4Ghz@unifi'
-password = 'abcd067615343'
+ssid = 'YOUR SSID'
+password = 'YOUR PASSWORD'
 
 class Sync:
     def __init__(self, receiver_ip, receiver_port):
@@ -85,7 +85,7 @@ class Sync:
 
             # Send the JSON data to the PC
             self.server.sendto(data_bytes, (self.receiver_ip, self.receiver_port))
-            message = f'Data sent: {data_to_send}'
+            message = f'Data sent to {self.receiver_ip}: {data_to_send}'
             print(message)
             
             # Reset list to initial state

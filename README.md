@@ -42,7 +42,7 @@ This Intelligent Home Automation System comprises a smart IoT plug that enables 
 
 #### Circuit Connection
 
-([images/Main Hub Connection.png](https://github.com/chingkx777/IOT-Smart-Plug-Effortless-On-Off-Automation/blob/main/Main%20Hub%20Connection.jpg))
+![Main Hub Connection](https://github.com/chingkx777/IOT-Smart-Plug-Effortless-On-Off-Automation/blob/main/Main%20Hub%20Connection.jpg)
 
 *Caption: Circuit connection diagram for the Intelligent Home Automation System.*
 

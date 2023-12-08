@@ -12,15 +12,15 @@ import time, socket, json, threading
 from kivy.uix.popup import Popup
 
 # IP Address for PC, SSIP, PORT
-PC_IP = '192.168.43.140'
-SSIP = '192.168.43.215'
+PC_IP = 'YOUR PC_IP'
+SSIP = 'YOUR SSIP'
 PORT = 8000
 
 # Create an object from class before execute .text() method
 receiver = send(SSIP, PORT)
 
-appliances = ['light', 'fan', 'router', 'music']
-pin = [23, 22, 21, 19]
+appliances = ['light', 'fan', 'charger']
+pin = [23, 22, 21]
 
 # Use a dictionary to store appliance statuses
 status = {appliance: 0 for appliance in appliances}
@@ -179,7 +179,7 @@ class MainLayout(Screen):
         print('\nVoice Button Pressed')
         t = speech2text()
         receiver.text(t.get_recognized_text())
-        receiver.text('Refresh')
+        receiver.text('refresh')
 
     # Change ON/OFF png according to Dictionary Statuses
     def update_image_source(self, instance, value):

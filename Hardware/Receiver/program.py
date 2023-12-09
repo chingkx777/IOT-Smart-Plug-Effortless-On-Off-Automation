@@ -3,7 +3,6 @@ from checker import ckr
 from oled import oled
 from button import button
 import time, machine, utime, json
-from hcsr04 import HCSR04
 
 # Text File saving IP Address
 file_name = "ip_address.txt"
